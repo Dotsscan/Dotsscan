@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dots Scan | Autonomous Agent Security & Explorer</title>
+  <meta name="description" content="The trust & security layer for autonomous dots on Robinhood. Real-time monitoring, permission audits, and on-chain verification.">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            noir: {
+              950: '#050505',
+              900: '#0B0B0D',
+              850: '#111216',
+              800: '#17191F',
+              700: '#232630',
+              400: '#8A8F9E',
+              200: '#D5D8E0',
+              100: '#EDEDF0',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* Subtle satin light reflections inspired by the logo background */
+    .satin-sheen {
+      background: radial-gradient(circle at 75% 20%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 35%, transparent 70%),
+                  radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+    }
+    .noir-card {
+      background: rgba(17, 18, 22, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .noir-card-glow:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+    }
+    .subtle-grid {
+      background-size: 48px 48px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="bg-[#050507] text-noir-200 antialiased font-sans selection:bg-white selection:text-black min-h-screen relative overflow-x-hidden satin-sheen">
+
+  <!-- Ambient Satin Lighting Sheen (Directly matched with logo background) -->
+  <div class="fixed top-[-20%] right-[-10%] w-[800px] h-[800px] bg-gradient-to-bl from-white/[0.07] via-white/[0.01] to-transparent blur-[160px] rounded-full pointer-events-none"></div>
+  <div class="fixed bottom-[-15%] left-[-10%] w-[600px] h-[600px] bg-white/[0.03] blur-[180px] rounded-full pointer-events-none"></div>
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 border-b border-white/[0.06] bg-[#050507]/85 backdrop-blur-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3.5 group">
+        <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center p-2 group-hover:border-white/30 transition-all duration-300 group-hover:bg-white/[0.08]">
+          <!-- Exact Vector Representation of the 6-Dot Star Logo -->
+          <svg viewBox="0 0 100 100" class="w-full h-full fill-white transition-transform group-hover:scale-105 duration-300">
+            <circle cx="50" cy="18" r="12" />
+            <circle cx="78" cy="34" r="12" />
+            <circle cx="78" cy="66" r="12" />
+            <circle cx="50" cy="82" r="12" />
+            <circle cx="22" cy="66" r="12" />
+            <circle cx="22" cy="34" r="12" />
+            <path d="M50 36 C50 44 44 50 36 50 C44 50 50 56 50 64 C50 56 56 50 64 50 C56 50 50 44 50 36 Z" fill="#050507" />
+          </svg>
+        </div>
+        <div>
+          <span class="text-lg font-bold tracking-wider text-white uppercase flex items-center gap-1">
+            Dots<span class="text-noir-400 font-light">Scan</span>
+          </span>
+          <span class="block text-[10px] tracking-widest uppercase font-mono text-noir-400">Autonomous Protocol</span>
+        </div>
+      </a>
+
+      <!-- Navigation -->
+      <nav class="hidden md:flex items-center gap-8 text-xs font-mono tracking-wider text-noir-400">
+        <a href="#scanner" class="hover:text-white transition-colors uppercase">Scanner</a>
+        <a href="#feed" class="hover:text-white transition-colors uppercase">Telemetry</a>
+        <a href="#architecture" class="hover:text-white transition-colors uppercase">Security Proofs</a>
+        <a href="#docs" class="hover:text-white transition-colors uppercase">Terminal</a>
+      </nav>
+
+      <!-- CTA -->
+      <div class="flex items-center gap-3">
+        <a href="https://x.com" target="_blank" class="px-3.5 py-1.5 rounded-lg text-xs font-mono border border-white/10 hover:border-white/30 text-noir-200 hover:text-white transition-all">
+          𝕏 / @DotsScan_
+        </a>
+        <a href="#scanner" class="px-4 py-2 rounded-lg text-xs font-semibold bg-white text-black hover:bg-neutral-200 shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all">
+          Connect Agent
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="relative z-10 pt-20 pb-24 subtle-grid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Monochromatic Badge -->
+      <div class="flex justify-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/15 bg-white/[0.03] text-xs font-mono text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+          <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+          <span class="tracking-widest uppercase text-[11px]">Boundary Audits Active • Robinhood Layer</span>
+        </div>
+      </div>
+
+      <!-- Main Headline -->
+      <div class="text-center max-w-4xl mx-auto">
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08]">
+          On-Chain Verification for <br>
+          <span class="bg-gradient-to-b from-white via-neutral-300 to-neutral-500 bg-clip-text text-transparent">
+            Autonomous Dots
+          </span>
+        </h1>
+        <p class="mt-6 text-sm sm:text-base text-noir-400 max-w-2xl mx-auto leading-relaxed font-normal">
+          Inspect parameter limits, audit tool permissions, and trace automated agent transactions on the Robinhood ecosystem in real time.
+        </p>
+      </div>
+
+      <!-- Scanner Input Box -->
+      <div id="scanner" class="mt-12 max-w-3xl mx-auto">
+        <div class="noir-card p-2 sm:p-2.5 rounded-2xl shadow-2xl flex flex-col sm:flex-row gap-2 border border-white/10 noir-card-glow transition-all">
+          <div class="flex-1 flex items-center gap-3 px-3 py-2 text-noir-400">
+            <svg class="w-4 h-4 text-noir-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input 
+              id="scanInput"
+              type="text" 
+              placeholder="Search Agent ID, Transaction Hash, or Contract Address..." 
+              class="w-full bg-transparent text-xs sm:text-sm text-white placeholder-noir-400 focus:outline-none font-mono"
+            >
+          </div>
+          <button 
+            onclick="runScan()"
+            class="px-6 py-2.5 bg-white hover:bg-neutral-200 text-black font-semibold text-xs tracking-wider uppercase rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg"
+          >
+            <span>Scan Dot</span>
+            <span>→</span>
+          </button>
+        </div>
+
+        <!-- Scan Output Card -->
+        <div id="scanResult" class="hidden mt-4 noir-card p-5 rounded-2xl border border-white/20">
+          <div class="flex items-center justify-between pb-3 border-b border-white/10">
+            <div class="flex items-center gap-3">
+              <div class="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></div>
+              <span class="font-mono text-xs font-semibold text-white tracking-wide" id="scanTarget">Dot-9824 // Treasury Rebalancer</span>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-white border border-white/20 uppercase tracking-wider">Audit: Verified</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 text-xs font-mono">
+            <div>
+              <span class="text-noir-400 block text-[11px]">Safety Score</span>
+              <span class="text-white text-base font-bold">99.8 / 100</span>
+            </div>
+            <div>
+              <span class="text-noir-400 block text-[11px]">Permission Bounds</span>
+              <span class="text-noir-200 font-semibold">Strict Sandbox</span>
+            </div>
+            <div>
+              <span class="text-noir-400 block text-[11px]">Max Settlement Cap</span>
+              <span class="text-white font-semibold">1,000.00 USDC</span>
+            </div>
+            <div>
+              <span class="text-noir-400 block text-[11px]">Protocol Hook</span>
+              <span class="text-noir-200 font-semibold">Robinhood Core</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Numbers -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+          <div class="noir-card p-4 rounded-xl text-center">
+            <div class="text-xl sm:text-2xl font-bold font-mono text-white">41,208</div>
+            <div class="text-[11px] font-mono text-noir-400 mt-1 uppercase tracking-wider">Agents Monitored</div>
+          </div>
+          <div class="noir-card p-4 rounded-xl text-center">
+            <div class="text-xl sm:text-2xl font-bold font-mono text-white">99.98%</div>
+            <div class="text-[11px] font-mono text-noir-400 mt-1 uppercase tracking-wider">Audit Pass Rate</div>
+          </div>
+          <div class="noir-card p-4 rounded-xl text-center">
+            <div class="text-xl sm:text-2xl font-bold font-mono text-white">1.4M+</div>
+            <div class="text-[11px] font-mono text-noir-400 mt-1 uppercase tracking-wider">Traced Executions</div>
+          </div>
+          <div class="noir-card p-4 rounded-xl text-center">
+            <div class="text-xl sm:text-2xl font-bold font-mono text-neutral-400">0</div>
+            <div class="text-[11px] font-mono text-noir-400 mt-1 uppercase tracking-wider">Breach Incidents</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Live Telemetry Stream -->
+  <section id="feed" class="py-16 border-t border-white/[0.06] bg-[#070709] relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+            <span>Live Agent Telemetry</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-white/10 text-white font-mono uppercase tracking-wider">Real-Time</span>
+          </h2>
+          <p class="text-xs text-noir-400 mt-1">Autonomous actions and parameter checks executed on the network.</p>
+        </div>
+        <div class="text-xs font-mono text-noir-400">
+          Sync Status: <span class="text-white">Active Block #18,941,204</span>
+        </div>
+      </div>
+
+      <!-- Monochrome Telemetry Table -->
+      <div class="noir-card rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-white/[0.02] border-b border-white/[0.08] text-noir-400 uppercase tracking-widest text-[10px]">
+              <tr>
+                <th class="py-3 px-4">Tx Hash</th>
+                <th class="py-3 px-4">Dot Agent</th>
+                <th class="py-3 px-4">Action Type</th>
+                <th class="py-3 px-4">Scope</th>
+                <th class="py-3 px-4">Boundary Check</th>
+                <th class="py-3 px-4 text-right">Latency</th>
+              </tr>
+            </thead>
+            <tbody id="liveRows" class="divide-y divide-white/[0.05] text-noir-200">
+              <tr class="hover:bg-white/[0.02] transition-colors">
+                <td class="py-3 px-4 text-white">0x8a9f...32d1</td>
+                <td class="py-3 px-4 text-white font-semibold flex items-center gap-2 font-sans text-xs">
+                  <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+                  <span>ArbitrageDot-Alpha</span>
+                </td>
+                <td class="py-3 px-4">Liquidity Swap</td>
+                <td class="py-3 px-4 text-noir-400">RH-Pool / ETH-USDC</td>
+                <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-white/10 text-white border border-white/20 text-[10px]">VERIFIED</span></td>
+                <td class="py-3 px-4 text-right text-noir-400">12ms</td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] transition-colors">
+                <td class="py-3 px-4 text-white">0x4b12...e810</td>
+                <td class="py-3 px-4 text-white font-semibold flex items-center gap-2 font-sans text-xs">
+                  <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+                  <span>ChiefOfStaff-V2</span>
+                </td>
+                <td class="py-3 px-4">Multi-App Invocation</td>
+                <td class="py-3 px-4 text-noir-400">Calendar & Treasury Hook</td>
+                <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-white/10 text-white border border-white/20 text-[10px]">VERIFIED</span></td>
+                <td class="py-3 px-4 text-right text-noir-400">18ms</td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] transition-colors">
+                <td class="py-3 px-4 text-white">0x99dc...10a9</td>
+                <td class="py-3 px-4 text-white font-semibold flex items-center gap-2 font-sans text-xs">
+                  <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+                  <span>Sentinel-LimitOrder</span>
+                </td>
+                <td class="py-3 px-4">Cancel & Replace</td>
+                <td class="py-3 px-4 text-noir-400">Equities Layer</td>
+                <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-white/10 text-white border border-white/20 text-[10px]">VERIFIED</span></td>
+                <td class="py-3 px-4 text-right text-noir-400">8ms</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Architecture / Features -->
+  <section id="architecture" class="py-20 relative z-10 border-t border-white/[0.06]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Cryptographic Safety Architecture
+        </h2>
+        <p class="mt-3 text-xs sm:text-sm text-noir-400 leading-relaxed">
+          Zero-trust verification designed for autonomous dots executing continuous financial tasks.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="noir-card p-6 rounded-2xl noir-card-glow transition-all">
+          <div class="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/15 flex items-center justify-center text-white mb-5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h3 class="text-base font-bold text-white mb-2">Permission Boundary Audits</h3>
+          <p class="text-xs text-noir-400 leading-relaxed font-light">
+            Every autonomous agent command is validated against predefined scope boundaries before broadcasting on-chain.
+          </p>
+        </div>
+
+        <div class="noir-card p-6 rounded-2xl noir-card-glow transition-all">
+          <div class="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/15 flex items-center justify-center text-white mb-5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="text-base font-bold text-white mb-2">Low-Latency Tracing</h3>
+          <p class="text-xs text-noir-400 leading-relaxed font-light">
+            High-speed indexing designed for low block-time confirmation. Inspect state alterations and gas consumption instantly.
+          </p>
+        </div>
+
+        <div class="noir-card p-6 rounded-2xl noir-card-glow transition-all">
+          <div class="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/15 flex items-center justify-center text-white mb-5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <h3 class="text-base font-bold text-white mb-2">Decentralized Trust Index</h3>
+          <p class="text-xs text-noir-400 leading-relaxed font-light">
+            Verifiable reputation scores measuring each dot's historic boundary adherence and behavioral consistency.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Interactive Terminal -->
+  <section id="docs" class="py-16 relative z-10 border-t border-white/[0.06] bg-[#070709]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="noir-card rounded-2xl p-6 border border-white/10">
+        <div class="flex items-center justify-between pb-3 border-b border-white/[0.08] mb-4">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-white/20"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-white/20"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-white/20"></span>
+            <span class="text-[11px] font-mono text-noir-400 ml-2">dotsscan-cli — noir v2.0</span>
+          </div>
+          <span class="text-[11px] font-mono text-white">STATUS: READY</span>
+        </div>
+        <div class="font-mono text-xs text-noir-200 space-y-2">
+          <p class="text-noir-400">// Initialize Dots Scan safety verifier for your autonomous agent</p>
+          <p><span class="text-white">$</span> npm i -g @dotsscan/robinhood-verifier</p>
+          <p><span class="text-white">$</span> dotsscan verify --agent-id "dot_rh_9824" --mode strict-boundary</p>
+          <p class="text-noir-200 mt-2">✔ Cryptographic identity verified</p>
+          <p class="text-white">✔ Permission bounds enforced on Robinhood layer</p>
+          <p class="text-noir-400">Agent telemetry available at: <span class="underline text-white">https://dotsscan.io/dot_rh_9824</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/[0.06] py-12 relative z-10 text-[11px] font-mono text-noir-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-5 h-5 rounded bg-white/5 border border-white/10 flex items-center justify-center p-0.5">
+          <svg viewBox="0 0 100 100" class="w-full h-full fill-white">
+            <circle cx="50" cy="18" r="12" />
+            <circle cx="78" cy="34" r="12" />
+            <circle cx="78" cy="66" r="12" />
+            <circle cx="50" cy="82" r="12" />
+            <circle cx="22" cy="66" r="12" />
+            <circle cx="22" cy="34" r="12" />
+          </svg>
+        </div>
+        <span>© 2026 Dots Scan. Monochromatic Autonomous Protocol.</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="https://x.com" target="_blank" class="hover:text-white transition-colors">Twitter (𝕏)</a>
+        <a href="#feed" class="hover:text-white transition-colors">Telemetry</a>
+        <a href="#architecture" class="hover:text-white transition-colors">Proofs</a>
+        <a href="https://github.com" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function runScan() {
+      const input = document.getElementById('scanInput').value.trim();
+      const resultCard = document.getElementById('scanResult');
+      const targetName = document.getElementById('scanTarget');
+
+      if (input) {
+        targetName.innerText = input.length > 25 ? input.slice(0, 10) + '...' + input.slice(-8) : input;
+      } else {
+        targetName.innerText = "Dot-RH-9824 // Treasury Rebalancer";
+      }
+
+      resultCard.classList.remove('hidden');
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    const liveAgents = [
+      { name: "PortfolioRebalance-Dot", action: "Limit Order Rebalance", scope: "RH-Equities / SPY-QQQ", lat: "14ms" },
+      { name: "DeltaHedge-Dot", action: "Option Strike Hedge", scope: "Robinhood Derivatives", lat: "9ms" },
+      { name: "MacroSentiment-Agent", action: "Signal Audit", scope: "News & Macro Feed", lat: "21ms" },
+      { name: "FlashLiquidity-Dot", action: "Arbitrage Execution", scope: "Settlement Bridge", lat: "11ms" }
+    ];
+
+    setInterval(() => {
+      const tbody = document.getElementById('liveRows');
+      const agent = liveAgents[Math.floor(Math.random() * liveAgents.length)];
+      const randHash = '0x' + Math.random().toString(16).substring(2, 6) + '...' + Math.random().toString(16).substring(2, 6);
+      
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-white/[0.02] transition-colors border-t border-white/[0.05] animate-pulse';
+      tr.innerHTML = `
+        <td class="py-3 px-4 text-white">${randHash}</td>
+        <td class="py-3 px-4 font-semibold text-white flex items-center gap-2 font-sans text-xs">
+          <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+          <span>${agent.name}</span>
+        </td>
+        <td class="py-3 px-4">${agent.action}</td>
+        <td class="py-3 px-4 text-noir-400">${agent.scope}</td>
+        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-white/10 text-white border border-white/20 text-[10px]">VERIFIED</span></td>
+        <td class="py-3 px-4 text-right text-noir-400">${agent.lat}</td>
+      `;
+      tbody.insertBefore(tr, tbody.firstChild);
+      setTimeout(() => tr.classList.remove('animate-pulse'), 800);
+      if (tbody.children.length > 8) {
+        tbody.removeChild(tbody.lastChild);
+      }
+    }, 4500);
+  </script>
+</body>
+</html>
